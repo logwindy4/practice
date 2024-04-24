@@ -34,4 +34,6 @@ public class BoardController {
         model.addAttribute("boardList", boardDTOList);
         return "list";
     }
+
+
 }
