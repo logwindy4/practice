@@ -31,6 +31,10 @@
 </style>
 <body>
 <table>
+    <!-- tr : 행 -->
+    <!-- td : 열 -->
+    <!-- th : HTML에서 테이블의 헤더셀-->
+    <!-- a : 하이퍼링크 -->
     <tr>
         <th class="">id</th>
         <th>title</th>
@@ -39,8 +43,8 @@
         <th>date</th>
         <th>hits</th>
     </tr>
-    <tr th:each="board: ${boardList}">
-        <td th:text="${board.id}"></td>
+    <tr th:each="board: ${boardList}"> <!-- db에 내용이추가될때마다 행 자동생성 -->
+        <td th:text="${board.id}"></td> <!-- 오토인크리먼트로 지정해 놓은값 id(게시물의id값) -->
         <td><a th:href="@{|/board/${board.id}|}" th:text="${board.boardTitle}"></a></td>
 <!--        <td><a th:href="@{/board/${board.id}}" th:text="${board.boardTitle}"></a></td>-->
         <td th:text="${board.boardWriter}"></td>
@@ -48,5 +52,11 @@
         <td th:text="${board.boardHits}"></td>
     </tr>
 </table>
+<button onclick="startPage()">메인화면</button>
+<script>
+    const startPage = () =>{
+        location.href = "/";
+    }
+</script>
 </body>
 </html>

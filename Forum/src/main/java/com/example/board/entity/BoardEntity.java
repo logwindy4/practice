@@ -32,9 +32,9 @@ public class BoardEntity extends BaseEntity {
 
     // DTO에 담긴 값들을 Entity 객체로 옮기는 작업
     // 입력된 값이 DTO에 저장되면 아래의 get~~ 내용들이 boardEntity 값으로 set
-    public static BoardEntity toSaveEntity(BoardDTO boardDTO){
-        BoardEntity boardEntity = new BoardEntity();
-        boardEntity.setBoardWriter(boardDTO.getBoardWriter());
+    public static BoardEntity toSaveEntity(BoardDTO boardDTO){  // DTO에 담긴 값을 Entity 객체로 옮기는 메소드
+        BoardEntity boardEntity = new BoardEntity();            // 객체생성
+        boardEntity.setBoardWriter(boardDTO.getBoardWriter());  // boardDTO 객체의 boardWriter 변수의 값을 가져와서 boardEntity 객체의 boardWriter 변수에 설정
         boardEntity.setBoardPass(boardDTO.getBoardPass());
         boardEntity.setBoardTitle(boardDTO.getBoardTitle());
         boardEntity.setBoardContents(boardDTO.getBoardContents());
