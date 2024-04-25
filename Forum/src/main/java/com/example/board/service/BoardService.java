@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 // DTO -> Entity
 // Entity -> DTO
@@ -34,5 +35,21 @@ public class BoardService {
             System.out.println("보드엔터티 = " + boardDTOList);
         }
         return boardDTOList;
+    }
+// jpa에서 제공중인 메서드들은 조회수증가나 특수한목적을 가진 커리들은 잘 되질 않아서 별도의 메서드를 정의해준다
+    @Transactional  // 별도의 추가된 메서드를 쓸 경우에는 트렌젝셔널 어노테이션은 붙인다(안붙이면 에러?)
+    public void updateHits(Long id) {
+        boardRepository.updateHits(id);
+    }
+    @Transactional
+    public BoardDTO findById(Long id) {
+        Optional<BoardEntity> optionalBoardEntity = boardRepository.findById(id);
+        if (optionalBoardEntity.isPresent()) {
+            BoardEntity boardEntity = optionalBoardEntity.get();
+            BoardDTO boardDTO = BoardDTO.toBoardDTO(boardEntity);
+            return boardDTO;
+        } else {
+            return null;
+        }
     }
 }
