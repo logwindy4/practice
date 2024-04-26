@@ -3,10 +3,14 @@ package com.example.board.controller;
 import com.example.board.dto.BoardDTO;
 import com.example.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.plaf.SpinnerUI;
 import java.util.List;
 
 @Controller   // 내가 컨트롤러다 라고 지정하는 어노테이션
@@ -49,5 +53,39 @@ public class BoardController {
 //        boardDTO : 실제 전달하고자 하는 데이터가 담긴 객체의 BoardDTO
 //        (자료형) (변수명) = (내용물) 여기서도 적용되는건가?????????
         return "detail";
+    }
+
+    @GetMapping("/update/{id}")
+    public String updateForm(@PathVariable long id, Model model){
+        BoardDTO boardDTO = boardService.findById(id);
+        model.addAttribute("boardUpdate", boardDTO);
+        return "update";
+    }
+
+    @PostMapping("/update")
+    public String update(@ModelAttribute BoardDTO boardDTO, Model model){
+        BoardDTO board = boardService.update(boardDTO);
+        model.addAttribute("board", board);
+        return "detail";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id){    // "/users/{id}"와 같은 URL에서 {id} 부분에 해당하는 값을 매개변수로 받아와야 할 때 @PathVariable을 사용
+        boardService.delete(id);
+        return "redirect:/board/";
+    }
+
+    @GetMapping("/paging")
+    public String paging(@PageableDefault(page = 1) Pageable pageable,Model model){
+        Page<BoardDTO> boardList = boardService.paging(pageable);
+        int blockLimit = 5; // 보여지는 페이지 갯수
+        int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) -1) * blockLimit +1;
+        int endPage =((startPage + blockLimit -1) < boardList.getTotalPages()) ? startPage + blockLimit -1 : boardList.getTotalPages();
+
+        model.addAttribute("boardList", boardList);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        return "paging";
+
     }
 }

@@ -2,6 +2,7 @@ package com.example.board.entity;
 
 import com.example.board.dto.BoardDTO;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,9 +23,11 @@ public class BoardEntity extends BaseEntity {
     private String boardPass;
 
     @Column
+    @NotBlank(message = "제목을 입력해 주세요")
     private String boardTitle;
 
     @Column(length = 500)
+    @NotBlank(message = "내용을 입력해 주세요")
     private String boardContents;
 
     @Column
@@ -39,6 +42,17 @@ public class BoardEntity extends BaseEntity {
         boardEntity.setBoardTitle(boardDTO.getBoardTitle());
         boardEntity.setBoardContents(boardDTO.getBoardContents());
         boardEntity.setBoardHits(0);
+        return boardEntity;
+    }
+// id값이 존재하는 상태로 엔티티객체가 넘어오면 jpa는 update를 하라고 대응 없다면 insert로 대응한다
+    public static BoardEntity toUpdateEntity(BoardDTO boardDTO) {
+        BoardEntity boardEntity = new BoardEntity();
+        boardEntity.setId(boardDTO.getId());     // <<<<
+        boardEntity.setBoardWriter(boardDTO.getBoardWriter());
+        boardEntity.setBoardPass(boardDTO.getBoardPass());
+        boardEntity.setBoardTitle(boardDTO.getBoardTitle());
+        boardEntity.setBoardContents(boardDTO.getBoardContents());
+        boardEntity.setBoardHits(boardDTO.getBoardHits());
         return boardEntity;
     }
 }
