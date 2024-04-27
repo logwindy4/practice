@@ -1,5 +1,6 @@
 package com.example.board.controller;
 
+
 import com.example.board.dto.BoardDTO;
 import com.example.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +41,8 @@ public class BoardController {
     }
 
     @GetMapping("/{id}")
-    public String findById(@PathVariable Long id, Model model ){ // 경로상의 값을 가져올 경우 @PathVariable 사용 데이터를 담아가야하니 model객체사용
+    public String findById(@PathVariable Long id, Model model,    // 경로상의 값을 가져올 경우 @PathVariable 사용 데이터를 담아가야하니 model객체사용
+                           @PageableDefault(page=1) Pageable pageable){
     /*
     * 해당 게시글의 조회수를 하나 올리고
     * 게시글 데이터를 가져와서 detail.html에 출력
@@ -52,6 +54,7 @@ public class BoardController {
 //        addAttribute : Spring MVC에서 Model 객체에 데이터를 추가할 때 사용하는 메소드
 //        boardDTO : 실제 전달하고자 하는 데이터가 담긴 객체의 BoardDTO
 //        (자료형) (변수명) = (내용물) 여기서도 적용되는건가?????????
+        model.addAttribute("page", pageable.getPageNumber());
         return "detail";
     }
 
@@ -66,7 +69,8 @@ public class BoardController {
     public String update(@ModelAttribute BoardDTO boardDTO, Model model){
         BoardDTO board = boardService.update(boardDTO);
         model.addAttribute("board", board);
-        return "detail";
+//        return "detail";
+        return "redirect:/board/" + board.getId();
     }
 
     @GetMapping("/delete/{id}")

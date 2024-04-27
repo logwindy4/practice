@@ -21,7 +21,7 @@ public class BoardDTO {
     private LocalDateTime boardCreatedTime;
     private LocalDateTime boardUpdatedTime;
 
-    public BoardDTO(Long id, String boardWriter, String boardTitle, LocalDateTime boardCreatedTime,int boardHits) {
+    public BoardDTO(Long id, String boardWriter, String boardTitle, int boardHits, LocalDateTime boardCreatedTime) {
         this.id = id;
         this.boardWriter = boardWriter;
         this.boardTitle = boardTitle;
