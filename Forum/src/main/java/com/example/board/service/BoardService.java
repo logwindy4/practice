@@ -48,18 +48,20 @@ public class BoardService {
                5. 해당 경로에 파일 저장
                6. board_table에 해당 데이터 save 처리
                7. board_file_table에 해당 데이터 save 처리
+               단일 파일시 1~7번 순서대로 작성하면 되지만 다중파일일 경우에는 수정된 순서대로 작성해야 한다
             */
-            MultipartFile boardFile = boardDTO.getBoardFile();  // 1.
-            String originalFilename = boardFile.getOriginalFilename();  // 2.
-            String storedFileName = System.currentTimeMillis() + "_" + originalFilename;  // 3. (currentTimeMillis() : 1970년도부터 밀리세컨단위로 풀이한값 3번에 3901293? 값
-            String savePath = "c:/springboot_img/" + storedFileName;  // 4. c:에 폴더를 만들어줘야함
-            boardFile.transferTo(new File(savePath));  // 5.
-            BoardEntity boardEntity = BoardEntity.toSaveFileEntity(boardDTO);
-            Long saveId = boardRepository.save(boardEntity).getId();
-            BoardEntity board = boardRepository.findById(saveId).get();
-
-            BoardFileEntity boardFileEntity = BoardFileEntity.toBoardFileEntity(board, originalFilename, storedFileName);
-            boardFileRepository.save(boardFileEntity);
+            BoardEntity boardEntity = BoardEntity.toSaveFileEntity(boardDTO);   // 6. , 부모데이터가 먼저 저장이 되야한다
+            Long savedId = boardRepository.save(boardEntity).getId();            // 6. , 부모데이터가 먼저 저장이 되야한다
+            BoardEntity board = boardRepository.findById(savedId).get();         // 6. , 부모데이터가 먼저 저장이 되야한다
+            for(MultipartFile boardFile : boardDTO.getBoardFile()) {    // for문은 다중파일로 변경되면서 추가됨
+//                MultipartFile boardFile = boardDTO.getBoardFile();  // 1. , DTO에 담긴 내용을 하나씩 꺼내는역할, 다중파일로 변경 되면서 필요 없어짐(for문사용)
+                String originalFileName = boardFile.getOriginalFilename();  // 2.
+                String storedFileName = System.currentTimeMillis() + "_" + originalFileName;  // 3. (currentTimeMillis() : 1970년도부터 밀리세컨단위로 풀이한값 3번에 3901293? 값
+                String savePath = "C:/springboot_img/" + storedFileName;  // 4. c:에 폴더를 만들어줘야함
+                boardFile.transferTo(new File(savePath));  // 5.
+                BoardFileEntity boardFileEntity = BoardFileEntity.toBoardFileEntity(board, originalFileName, storedFileName);
+                boardFileRepository.save(boardFileEntity);
+            }
         }
     }
 
