@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.plaf.SpinnerUI;
+import java.io.IOException;
 import java.util.List;
 
 @Controller   // 내가 컨트롤러다 라고 지정하는 어노테이션
@@ -26,7 +27,7 @@ public class BoardController {
     }
 
     @PostMapping("/post")
-    public String post(@ModelAttribute BoardDTO boardDTO){
+    public String post(@ModelAttribute BoardDTO boardDTO) throws IOException {
         System.out.println("boardDTO = " + boardDTO);
         boardService.post(boardDTO);
         return "index";

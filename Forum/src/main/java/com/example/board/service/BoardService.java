@@ -2,6 +2,8 @@ package com.example.board.service;
 
 import com.example.board.dto.BoardDTO;
 import com.example.board.entity.BoardEntity;
+import com.example.board.entity.BoardFileEntity;
+import com.example.board.repository.BoardFileRepository;
 import com.example.board.repository.BoardRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +12,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,14 +27,43 @@ import java.util.Optional;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final BoardFileRepository boardFileRepository;
 
     @Transactional
-    public void post(BoardDTO boardDTO) {
-        BoardEntity boardEntity = BoardEntity.toSaveEntity(boardDTO);
-        boardRepository.save(boardEntity);
-        System.out.println("저장? = " + boardEntity.getId());
+    public void post(BoardDTO boardDTO) throws IOException {
+        // 파일 첨부 여부에 따라 로직 분리
+        if(boardDTO.getBoardFile().isEmpty()){
+            // 첨부 파일 없음.
+            BoardEntity boardEntity = BoardEntity.toSaveEntity(boardDTO);
+            boardRepository.save(boardEntity);
+            System.out.println("저장? = " + boardEntity.getId());
+        }else{
+            // 첨부 파일 있음.
+            /*
+               1. DTO에 담긴 파일을 꺼냄
+               2. 파일의 이름 가져옴
+               3. 서버 저장을 이름으로 수정
+               // 내사진.jpg => 3901293_내사진.jpg
+               4. 저장 경로 설정
+               5. 해당 경로에 파일 저장
+               6. board_table에 해당 데이터 save 처리
+               7. board_file_table에 해당 데이터 save 처리
+            */
+            MultipartFile boardFile = boardDTO.getBoardFile();  // 1.
+            String originalFilename = boardFile.getOriginalFilename();  // 2.
+            String storedFileName = System.currentTimeMillis() + "_" + originalFilename;  // 3. (currentTimeMillis() : 1970년도부터 밀리세컨단위로 풀이한값 3번에 3901293? 값
+            String savePath = "c:/springboot_img/" + storedFileName;  // 4. c:에 폴더를 만들어줘야함
+            boardFile.transferTo(new File(savePath));  // 5.
+            BoardEntity boardEntity = BoardEntity.toSaveFileEntity(boardDTO);
+            Long saveId = boardRepository.save(boardEntity).getId();
+            BoardEntity board = boardRepository.findById(saveId).get();
+
+            BoardFileEntity boardFileEntity = BoardFileEntity.toBoardFileEntity(board, originalFilename, storedFileName);
+            boardFileRepository.save(boardFileEntity);
+        }
     }
 
+    @Transactional
     public List<BoardDTO> findAll() {   // 화면에 보여줄 게시물을 모두 찾아서 리스트로 만들어주는 메소드
         List<BoardEntity> boardEntityList = boardRepository.findAll();  // DB에서 모든 게시물을 가져오는 코드 boardEntityList에 저장
         List<BoardDTO> boardDTOList = new ArrayList<>();    // ArrayList<>()라는 변수생성하고 boardDTOList 이름짓고 List<BoardDTO>의 값을 넣는다
@@ -40,11 +74,13 @@ public class BoardService {
         }
         return boardDTOList;
     }
+
 // jpa에서 제공중인 메서드들은 조회수증가나 특수한목적을 가진 커리들은 잘 되질 않아서 별도의 메서드를 정의해준다
     @Transactional  // 별도의 추가된 메서드를 쓸 경우에는 트렌젝셔널 어노테이션은 붙인다(안붙이면 에러?)
     public void updateHits(Long id) {
         boardRepository.updateHits(id);
     }
+
     @Transactional
     public BoardDTO findById(Long id) {
         Optional<BoardEntity> optionalBoardEntity = boardRepository.findById(id);
