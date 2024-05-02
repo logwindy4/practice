@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>detail</title>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
 </head>
 <style>
     table{
@@ -64,10 +65,23 @@
 <button onclick="listReq()">목록</button>
 <button onclick="updateReq()">수정</button>
 <button onclick="deleteReq()">삭제</button>
-<button>sadasdsad
-</button>
+
+<!-- 댓글 작성 부분 -->
+<div id="comment-write">
+    <input type="text" id="commentWriter" placeholder="작성자">
+    <input type="text" id="commentContents" placeholder="내용">
+    <button id="comment-write-btn" onclick="commentWrite()">댓글작성</button>
+</div>
+<!-- 댓글 출력 부분-->
+
 </body>
 <script th:inline="javascript">
+    const commentWrite = () => {
+        const writer = document.getElementById("commentWriter").value;
+        const contents = document.getElementById("commentContents").value;
+        console.log("작성자: ", writer);
+        console.log("내용: ", contents);
+    }
     const listReq = () => {
         console.log("목록 요청");
         const page = [[${page}]];
