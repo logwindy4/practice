@@ -30,7 +30,7 @@ public class BoardService {
     private final BoardFileRepository boardFileRepository;
 
     @Transactional
-    public void post(BoardDTO boardDTO) throws IOException {
+    public void save(BoardDTO boardDTO) throws IOException {
         // 파일 첨부 여부에 따라 로직 분리
         if(boardDTO.getBoardFile().isEmpty()){
             // 첨부 파일 없음.

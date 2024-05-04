@@ -2,7 +2,9 @@ package com.example.board.controller;
 
 
 import com.example.board.dto.BoardDTO;
+import com.example.board.dto.CommentDTO;
 import com.example.board.service.BoardService;
+import com.example.board.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,16 +21,17 @@ import java.util.List;
 @RequestMapping("/board")   // 최상위 경로 지정
 public class BoardController {
     private final BoardService boardService;
+    private final CommentService commentService;
 
-    @GetMapping("/post")    // 하위 경로 지정
-    public String postForm() {
-        return "post";
+    @GetMapping("/save")    // 하위 경로 지정
+    public String saveForm() {
+        return "save";
     }
 
-    @PostMapping("/post")
-    public String post(@ModelAttribute BoardDTO boardDTO) throws IOException {
+    @PostMapping("/save")
+    public String save(@ModelAttribute BoardDTO boardDTO) throws IOException {
         System.out.println("boardDTO = " + boardDTO);
-        boardService.post(boardDTO);
+        boardService.save(boardDTO);
         return "index";
     }
 
@@ -49,6 +52,10 @@ public class BoardController {
     * */
         boardService.updateHits(id);    // 서비스 클래스에 updateHitss 메서드 호출, (id)는 고유식별자
         BoardDTO boardDTO = boardService.findById(id);   // findById 메서드 호출 boardDTO 객체로 넣고
+
+        /* 댓글 목록 가져오기 */
+        List<CommentDTO> commentDTOList = commentService.findAll(id);
+        model.addAttribute("commentList", commentDTOList);
         model.addAttribute("board", boardDTO);  // boardDTO를 board라는 파라메터로지정 model객체에 addAttribute로 추가
 //        model : Spring MVC에서 Controller에서 View로 데이터를 전달할 때 사용하는 객체
 //        addAttribute : Spring MVC에서 Model 객체에 데이터를 추가할 때 사용하는 메소드
@@ -59,7 +66,7 @@ public class BoardController {
     }
 
     @GetMapping("/update/{id}")
-    public String updateForm(@PathVariable long id, Model model){
+    public String updateForm(@PathVariable Long id, Model model){
         BoardDTO boardDTO = boardService.findById(id);
         model.addAttribute("boardUpdate", boardDTO);
         return "update";
