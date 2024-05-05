@@ -9,6 +9,7 @@
     <button onclick="saveReq()">글작성</button>
     <button onclick="photoReq()">사진</button>
     <button onclick="videoReq()">동영상</button>
+    <button onclick="signUpReq()">회원가입</button>
 </body>
 <script>
     const saveReq = () => {
@@ -21,6 +22,10 @@
 
     const videoReq = () => {
         location.href = "/board/video";
+    }
+
+    const signUpReq = () => {
+        location.href = "/board/signup"
     }
 </script>
 </html>
