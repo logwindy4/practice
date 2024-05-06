@@ -2,16 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>index</title>
 </head>
 <body>
     <tr>게시판</tr><br>
+    <button onclick="signUpReq()">회원가입</button>
+    <button onclick="logInReq()">로그인</button> <br><br>
     <button onclick="saveReq()">글작성</button>
     <button onclick="photoReq()">사진</button>
     <button onclick="videoReq()">동영상</button>
-    <button onclick="signUpReq()">회원가입</button>
+    <a href="/board/login">뭘까요</a>
 </body>
 <script>
+    const signUpReq = () => {
+        location.href = "/board/signup"
+    }
+
+    const logInReq = () =>{
+        location.href = "/board/login"
+    }
+
     const saveReq = () => {
         location.href = "/board/save";
     }
@@ -22,10 +32,6 @@
 
     const videoReq = () => {
         location.href = "/board/video";
-    }
-
-    const signUpReq = () => {
-        location.href = "/board/signup"
     }
 </script>
 </html>

@@ -1,17 +1,18 @@
 package com.example.board.service;
 
 import com.example.board.dao.UserDAO;
+import com.example.board.dto.UserDTO;
+import com.example.board.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
-    private UserDAO userDAO;
-    @Autowired
-    public UserService(UserDAO userDAO){
-        this.userDAO = userDAO;
-    }
-    public void createUser(String id, String password, String email) {
-        userDAO.createUser(id, password, email);
+    private final UserRepository userRepository;
+
+    public void createUser(UserDTO userDTO) {
+
     }
 }

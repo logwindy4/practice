@@ -13,8 +13,8 @@ public class UserDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void createUser(String id, String password, String email){
-        String sql = "INSERT INTO (id, password, email) VALUES (?,?,?)";
-        jdbcTemplate.update(sql, id, password, email);
+    public void createUser(String id, String password, String email, String name){
+        String sql = "INSERT INTO (id, password, email, name) VALUES (?,?,?)";
+        jdbcTemplate.update(sql, id, password, email, name);
     }
 }

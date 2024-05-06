@@ -24,7 +24,12 @@ public class BoardController {
     }
 
     @GetMapping("/signup")
-    public String registerForm(){
+    public String signUpForm(){
         return "signup";
+    }
+
+    @GetMapping("/login")
+    public String logInForm(){
+        return "login";
     }
 }
