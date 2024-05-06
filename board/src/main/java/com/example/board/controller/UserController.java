@@ -15,7 +15,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String id, @RequestParam String password){
+    public String login(@RequestParam String nickname, @RequestParam String password){
         return "redirect:/index";
     }
 }
