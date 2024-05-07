@@ -12,10 +12,10 @@ import lombok.Setter;
 public class UserEntity {
     @Id // pk 지정
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
-    private Long no;
+    private Long No;
 
     @Column
-    private String userid;
+    private String userId;
 
     @Column
     private String password;
@@ -26,10 +26,11 @@ public class UserEntity {
     @Column
     private String username;
 
+    // Entity는 DB와의 상호작용할때 사용
     public static UserEntity toUserEntity(UserDTO userDTO){
         UserEntity userEntity = new UserEntity();
         userEntity.setNo(userDTO.getNo());
-        userEntity.setUserid(userDTO.getUserid());
+        userEntity.setUserId(userDTO.getUserId());
         userEntity.setPassword(userDTO.getPassword());
         userEntity.setEmail(userDTO.getEmail());
         userEntity.setUsername(userDTO.getUsername());
