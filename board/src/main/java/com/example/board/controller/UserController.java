@@ -26,10 +26,12 @@ public class UserController {
         UserDTO loginResult = userService.login(userDTO);
         if (loginResult != null) {
             session.setAttribute("loginId", loginResult.getUserId());
+            System.out.println("loginResult = " + loginResult.getUserId());
+            System.out.println("userDTO = " + userDTO.getUserId());
             System.out.println("아이디가 있습니다");
             return "/main";
         } else {
-            System.out.println("아이디가 없습니다");
+            System.out.println("일치하지 않습니다");
             return "/login";
         }
     }

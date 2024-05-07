@@ -14,7 +14,7 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
     private Long No;
 
-    @Column
+    @Column(name = "userId")
     private String userId;
 
     @Column

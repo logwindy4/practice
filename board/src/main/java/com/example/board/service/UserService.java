@@ -17,12 +17,15 @@ public class UserService {
 
     public UserDTO login(UserDTO userDTO) {
         Optional<UserEntity> byUserUserId = userRepository.findByUserId(userDTO.getUserId());
+        System.out.println("DTO에서 값을 가져오니? = " + userDTO);
         if(byUserUserId.isPresent()){
             // 조회 결과가 있다 (해당 아이디를 가진 회원 정보가 있다면)
+            System.out.println("값을 가져오면 true = " + byUserUserId.isPresent());
             UserEntity userEntity = byUserUserId.get();
             if(userEntity.getPassword().equals(userDTO.getPassword())){
                 // 비밀번호 일치
                 // Entity -> DTO 변환후 리턴
+                System.out.println("비밀번호 = " + userDTO.getPassword());
                 UserDTO dto = UserDTO.toUserDTO(userEntity);
                 return dto;
             }else{
@@ -31,6 +34,7 @@ public class UserService {
                 return null;
             }
         }else{
+            System.out.println("userDTO = " + userDTO);
             System.out.println("아이디 없음");
             return null;
         }
