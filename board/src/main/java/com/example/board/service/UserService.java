@@ -8,6 +8,8 @@ import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -47,5 +49,31 @@ public class UserService {
         userRepository.save(userEntity);
         System.out.println("userDTO = " + userDTO);
         // repository의 createUser 메서드 호출 ( 조건. entity객체를 넘겨줘야 함)
+    }
+
+    // Repository는 데이터베이스와의 상호작용을 담당하며, 이를 통해 Entity 객체를 저장, 조회, 수정, 삭제할 수 있다.
+    // DTO는 Entity와의 상호작용을 담당, DTO는 데이터 전송을 위한 객체로, 주로 서로 다른 시스템 또는 계층 간에 데이터를 전송할 때 사용
+
+
+    public List<UserDTO> findAll() {
+        List<UserEntity> userEntityList = userRepository.findAll();
+        List<UserDTO> userDTOList = new ArrayList<>();
+        for(UserEntity userEntity: userEntityList ){
+            userDTOList.add(UserDTO.toUserDTO(userEntity));
+            System.out.println("userDTOList = " + userDTOList);
+        }
+        return userDTOList;
+    }
+
+    public UserDTO findByNo(Long no) {
+        Optional<UserEntity> optionalUserEntity = userRepository.findByNo(no);
+        if(optionalUserEntity.isPresent()){
+//            UserEntity userEntity = optionalUserEntity.get();
+//            UserDTO.toUserDTO(userEntity);
+//            return userDTO;
+            return UserDTO.toUserDTO(optionalUserEntity.get());
+        }else{
+            return null;
+        }
     }
 }

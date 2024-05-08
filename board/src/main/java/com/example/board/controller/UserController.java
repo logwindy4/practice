@@ -6,11 +6,12 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.HttpSessionRequiredException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.model.IModel;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -34,5 +35,25 @@ public class UserController {
             System.out.println("일치하지 않습니다");
             return "/login";
         }
+    }
+
+//    @GetMapping("/list")
+//    public String listForm(){
+//        return "list";
+//    }
+    @GetMapping("/board/list")
+    public String findAll(Model model) {
+        List<UserDTO> userDTOList = userService.findAll();
+        // 어떠한 html로 가져갈 데이터가 있다면 model사용
+        model.addAttribute("userList", userDTOList);
+        System.out.println("userDTOList = " + userDTOList);
+        return "list";
+    }
+
+    @GetMapping("/board/{no}")
+    public String findById(@PathVariable Long no, Model model) {
+        UserDTO userDTO = userService.findByNo(no);
+        model.addAttribute("board", userDTO);
+        return "detail";
     }
 }

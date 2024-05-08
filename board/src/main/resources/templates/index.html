@@ -7,19 +7,25 @@
 <body>
     <tr>게시판</tr><br>
     <button onclick="signUpReq()">회원가입</button>
-    <button onclick="logInReq()">로그인</button> <br><br>
+    <a href="/signup">회원가입</a>
+    <button onclick="logInReq()">로그인</button>
+    <a href="/login">로그인</a> <br><br>
     <button onclick="saveReq()">글작성</button>
+    <a href="/board/save">글작성</a>
     <button onclick="photoReq()">사진</button>
+    <a href="/board/photo">사진</a>
     <button onclick="videoReq()">동영상</button>
-    <a href="/board/login">뭘까요</a>
+    <a href="/board/video">동영상</a>
+    <button onclick="listReq()">회원목록</button>
+    <a href="/board/list">회원목록</a>
 </body>
 <script>
     const signUpReq = () => {
-        location.href = "/board/signup"
+        location.href = "/signup"
     }
 
     const logInReq = () =>{
-        location.href = "/board/login"
+        location.href = "/login"
     }
 
     const saveReq = () => {
@@ -32,6 +38,10 @@
 
     const videoReq = () => {
         location.href = "/board/video";
+    }
+
+    const listReq = () => {
+        location.href = "/board/list";
     }
 </script>
 </html>

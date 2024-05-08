@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>list</title>
+</head>
+<body>
+<h2>회원목록</h2>
+<table>
+    <tr>
+        <th>no</th>
+        <th>userid</th>
+        <th>userEmail</th>
+        <th>userPassword</th>
+        <th>userName</th>
+        <th>상세조회</th>
+        <th>삭제</th>
+    </tr>
+    <!-- th:each = 타임리프에서 제공하는 문법, for문 과 같은 문법이라 보면됨 -->
+    <tr th:each="user: ${userList}">
+        <!-- Controller에 있는 model에 담긴 userList를 가져와 ${userList}에서 사용, 이름이 같아야함  -->
+        <td th:text="${user.no}"></td>  <!-- DTO에서 지정한 필드이름과 같아야 한다 -->
+        <td th:text="${user.userId}"></td>  <!-- DTO에서 지정한 필드이름과 같아야 한다 -->
+        <td th:text="${user.email}"></td>
+        <td th:text="${user.password}"></td>
+        <td th:text="${user.username}"></td>
+
+        <td>
+            <a th:href="@{|/board/${user.no}|}">상세조회</a>
+        </td>
+        <td>
+            <a th:href="@{|/board/delete/${user.no}|}">삭제</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

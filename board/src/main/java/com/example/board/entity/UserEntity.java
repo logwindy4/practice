@@ -12,7 +12,7 @@ import lombok.Setter;
 public class UserEntity {
     @Id // pk 지정
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
-    private Long No;
+    private Long no;
 
     @Column(name = "userId")
     private String userId;
@@ -20,7 +20,7 @@ public class UserEntity {
     @Column
     private String password;
 
-    @Column(unique = true)  // unique 제약조건 추가
+    @Column(name ="userEmail", unique = true)  // unique 제약조건 추가
     private String email;
 
     @Column
