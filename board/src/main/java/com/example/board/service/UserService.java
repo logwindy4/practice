@@ -48,19 +48,23 @@ public class UserService {
         UserEntity userEntity = UserEntity.toUserEntity(userDTO);
         userRepository.save(userEntity);
         System.out.println("userDTO = " + userDTO);
+        if(userEntity != null){
+            System.out.println("가입성공");
+        }else{
+            System.out.println("가입실패");
+        }
         // repository의 createUser 메서드 호출 ( 조건. entity객체를 넘겨줘야 함)
     }
 
     // Repository는 데이터베이스와의 상호작용을 담당하며, 이를 통해 Entity 객체를 저장, 조회, 수정, 삭제할 수 있다.
     // DTO는 Entity와의 상호작용을 담당, DTO는 데이터 전송을 위한 객체로, 주로 서로 다른 시스템 또는 계층 간에 데이터를 전송할 때 사용
 
-
     public List<UserDTO> findAll() {
         List<UserEntity> userEntityList = userRepository.findAll();
         List<UserDTO> userDTOList = new ArrayList<>();
         for(UserEntity userEntity: userEntityList ){
             userDTOList.add(UserDTO.toUserDTO(userEntity));
-            System.out.println("userDTOList = " + userDTOList);
+            System.out.println("가입회원 조회 = " + userDTOList);
         }
         return userDTOList;
     }
@@ -75,5 +79,25 @@ public class UserService {
         }else{
             return null;
         }
+    }
+
+    public UserDTO updateForm(String myNo) {
+        Optional<UserEntity> optionalUserEntity = userRepository.findByUserId(myNo);
+        System.out.println("myNo = " + myNo);
+        if(optionalUserEntity.isPresent()){
+            return UserDTO.toUserDTO(optionalUserEntity.get()); //  optionalUserEntity객체를 까서 userDTO로 변환후 리턴을한다
+        }else{
+            return null;
+        }
+    }
+
+    public void update(UserDTO userDTO) {
+        userRepository.save(UserEntity.toUpdateUserEntity(userDTO));
+        System.out.println("업데이트? = " + userDTO);
+    }
+
+    public void deleteById(Long no) {
+        userRepository.deleteById(no);
+        System.out.println("삭제된대표no = " + no);
     }
 }

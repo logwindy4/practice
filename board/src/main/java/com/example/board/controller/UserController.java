@@ -4,6 +4,7 @@ import com.example.board.dto.UserDTO;
 import com.example.board.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.model.IModel;
 
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,7 +31,7 @@ public class UserController {
             session.setAttribute("loginId", loginResult.getUserId());
             System.out.println("loginResult = " + loginResult.getUserId());
             System.out.println("userDTO = " + userDTO.getUserId());
-            System.out.println("아이디가 있습니다");
+            System.out.println("로그인 되었습니다");
             return "/main";
         } else {
             System.out.println("일치하지 않습니다");
@@ -37,10 +39,11 @@ public class UserController {
         }
     }
 
-//    @GetMapping("/list")
-//    public String listForm(){
-//        return "list";
-//    }
+    @GetMapping("/detail")
+    public String redirectToMain() {
+        return "redirect:/main";
+    }
+
     @GetMapping("/board/list")
     public String findAll(Model model) {
         List<UserDTO> userDTOList = userService.findAll();
@@ -53,7 +56,31 @@ public class UserController {
     @GetMapping("/board/{no}")
     public String findById(@PathVariable Long no, Model model) {
         UserDTO userDTO = userService.findByNo(no);
-        model.addAttribute("board", userDTO);
+        model.addAttribute("user", userDTO);
+        System.out.println("수정내용 = " + userDTO);
         return "detail";
+    }
+
+    @GetMapping("/board/update")
+    public String updateForm(HttpSession session, Model model){
+        String myNo = (String)session.getAttribute("loginId"); // 값을 담을때는 getAttribute 가져 올때는 setAttribute
+                    // 강제형변환 Object -> Long
+        UserDTO userDTO = userService.updateForm(myNo);         // userDTO 가져와서
+        model.addAttribute("updateUser", userDTO);  // updateUser 담고
+        return "update";                                        // update로 이동
+    }
+
+    @PostMapping("/board/update")
+    public String update(@ModelAttribute UserDTO userDTO){
+        userService.update(userDTO);
+        System.out.println("업데이트?? = " + userDTO);
+        return "redirect:/board/" + userDTO.getNo();    // 내정보를 수정후 완료된 상세페이지 띄워줌
+    }
+
+    @GetMapping("/board/delete/{no}")
+    public String deleteById(@PathVariable Long no){
+        userService.deleteById(no);
+        System.out.println("삭제된:no = " + no);
+        return "redirect:/board/list";
     }
 }
