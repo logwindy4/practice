@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Controller
+@RequestMapping("/board")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -44,7 +45,7 @@ public class UserController {
         return "redirect:/main";
     }
 
-    @GetMapping("/board/list")
+    @GetMapping("/list")
     public String findAll(Model model) {
         List<UserDTO> userDTOList = userService.findAll();
         // 어떠한 html로 가져갈 데이터가 있다면 model사용
@@ -53,7 +54,7 @@ public class UserController {
         return "list";
     }
 
-    @GetMapping("/board/{no}")
+    @GetMapping("/{no}")
     public String findById(@PathVariable Long no, Model model) {
         UserDTO userDTO = userService.findByNo(no);
         model.addAttribute("user", userDTO);
@@ -61,7 +62,7 @@ public class UserController {
         return "detail";
     }
 
-    @GetMapping("/board/update")
+    @GetMapping("/update")
     public String updateForm(HttpSession session, Model model){
         String myNo = (String)session.getAttribute("loginId"); // 값을 담을때는 getAttribute 가져 올때는 setAttribute
                     // 강제형변환 Object -> Long
@@ -70,21 +71,21 @@ public class UserController {
         return "update";                                        // update로 이동
     }
 
-    @PostMapping("/board/update")
+    @PostMapping("/update")
     public String update(@ModelAttribute UserDTO userDTO){
         userService.update(userDTO);
         System.out.println("업데이트?? = " + userDTO);
         return "redirect:/board/" + userDTO.getNo();    // 내정보를 수정후 완료된 상세페이지 띄워줌
     }
 
-    @GetMapping("/board/delete/{no}")
+    @GetMapping("/delete/{no}")
     public String deleteById(@PathVariable Long no){
         userService.deleteById(no);
         System.out.println("삭제된:no = " + no);
         return "redirect:/board/list";
     }
 
-    @GetMapping("/board/logout")
+    @GetMapping("/logout")
     public String logout(HttpSession session){
         session.invalidate();
         if(session != null){
@@ -94,7 +95,7 @@ public class UserController {
     }
 
 //    @ResponseBody를 붙이면 관리자 콘솔에 입력값이 보여지게된다
-    @PostMapping("/board/userId-check")
+    @PostMapping("/userId-check")
     public @ResponseBody String userIdCheck(@RequestParam("userId") String userId){
         System.out.println("userId = " + userId);
         String checkResult = userService.userIdCheck(userId);
@@ -105,7 +106,7 @@ public class UserController {
             return "no";
         }
     }
-    @PostMapping("/board/email-check")
+    @PostMapping("/email-check")
     public @ResponseBody String userEmailCheck(@RequestParam("email")String email){
         String checkResult = userService.userEmailCheck(email);
         System.out.println("checkResult = " + checkResult);

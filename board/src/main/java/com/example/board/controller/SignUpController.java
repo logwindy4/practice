@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Controller
+@RequestMapping("/board")
 @RequiredArgsConstructor // 클래스의 모든 final 필드 또는 @NonNull 어노테이션이 붙은 필드에 대해 생성자를 자동으로 생성(매개변수 생성자 생략)
 public class SignUpController {
     // 생성자 주입 (해당 필드의 값이 생성된 후에 변경되지 않음을 나타낸다)
@@ -28,6 +29,6 @@ public class SignUpController {
         System.out.println("SignUpController.signUp 요청이 오니");
         System.out.println("userDTO = " + userDTO);
         userService.createUser(userDTO);
-        return "redirect:/login";
+        return "redirect:/board/login";
     }
 }

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-//@RequestMapping("/board")       // 최상위 주소
+@RequestMapping("/board")       // 최상위 주소
 public class BoardController {
     @GetMapping("/save")        // 해당 주소로 이동하는 메소드
     public String saveForm(){

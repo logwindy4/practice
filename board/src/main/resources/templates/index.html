@@ -7,7 +7,7 @@
 <body>
     <tr>게시판</tr><br>
     <button onclick="signUpReq()">회원가입</button>
-    <a href="/signup">회원가입</a>
+    <a href="/board/signup">회원가입</a>
     <button onclick="logInReq()">로그인</button>
     <a href="/login">로그인</a> <br><br>
     <button onclick="saveReq()">글작성</button>
@@ -21,11 +21,11 @@
 </body>
 <script>
     const signUpReq = () => {
-        location.href = "/signup"
+        location.href = "/board/signup"
     }
 
     const logInReq = () =>{
-        location.href = "/login"
+        location.href = "/board/login"
     }
 
     const saveReq = () => {
