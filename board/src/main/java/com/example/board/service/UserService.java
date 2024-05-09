@@ -100,4 +100,29 @@ public class UserService {
         userRepository.deleteById(no);
         System.out.println("삭제된대표no = " + no);
     }
+
+    public String userIdCheck(String userId) {
+        Optional<UserEntity> byUserId = userRepository.findByUserId(userId);
+        System.out.println("byUserId.isPresent() = " + byUserId.isPresent());
+        if(byUserId.isPresent()){
+//      .isPresent()는 Java에서 Optional 클래스의 메서드 중 하나이며
+//      주어진 Optional 객체가 값이 있는지를 확인하는 데 사용
+//      값이 없을 수도 있는 객체를 감싸는 래퍼
+//      값이 존재하면 true를 반환하고, 값이 없으면 false를 반환
+            return null;
+            // 조회결과가 있다 -> 사용중(사용할 수 없다.)
+        }else{
+            // 조회결과가 없다 -> 미사용(사용할 수 있다.)
+            return "ok";
+        }
+    }
+    public String userEmailCheck(String email){
+        Optional<UserEntity> byUserEmail = userRepository.findByEmail(email);
+        System.out.println("byUserEmail.isPresent() = " + byUserEmail.isPresent());
+        if(byUserEmail.isPresent()){
+            return null;
+        }else{
+            return "ok";
+        }
+    }
 }

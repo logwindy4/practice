@@ -83,4 +83,37 @@ public class UserController {
         System.out.println("삭제된:no = " + no);
         return "redirect:/board/list";
     }
+
+    @GetMapping("/board/logout")
+    public String logout(HttpSession session){
+        session.invalidate();
+        if(session != null){
+            System.out.println("로그아웃");
+        }
+        return "index";
+    }
+
+//    @ResponseBody를 붙이면 관리자 콘솔에 입력값이 보여지게된다
+    @PostMapping("/board/userId-check")
+    public @ResponseBody String userIdCheck(@RequestParam("userId") String userId){
+        System.out.println("userId = " + userId);
+        String checkResult = userService.userIdCheck(userId);
+        System.out.println("checkResult = " + checkResult);
+        if(checkResult != null){
+            return "ok";
+        }else {
+            return "no";
+        }
+    }
+    @PostMapping("/board/email-check")
+    public @ResponseBody String userEmailCheck(@RequestParam("email")String email){
+        String checkResult = userService.userEmailCheck(email);
+        System.out.println("checkResult = " + checkResult);
+        if(checkResult != null){
+            return "ok";
+        }else {
+            return "no";
+        }
+
+    }
 }
