@@ -15,7 +15,7 @@ public class UserEntity {
     @Column(name = "no")
     private Long no;
 
-    @Column(name = "userId")
+    @Column(name = "userId", unique = true)
     private String userId;
 
     @Column
@@ -26,8 +26,11 @@ public class UserEntity {
 
     @Column
     private String username;
-
     // Entity는 DB와의 상호작용할때 사용
+
+    @Column(name = "role")
+    public String role;
+
     public static UserEntity toUserEntity(UserDTO userDTO){
         UserEntity userEntity = new UserEntity();
         userEntity.setNo(userDTO.getNo());
@@ -35,6 +38,7 @@ public class UserEntity {
         userEntity.setPassword(userDTO.getPassword());
         userEntity.setEmail(userDTO.getEmail());
         userEntity.setUsername(userDTO.getUsername());
+        userEntity.setRole(userDTO.getRole());
         return userEntity;
     }
 

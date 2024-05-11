@@ -6,6 +6,7 @@ import com.example.board.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     public UserDTO login(UserDTO userDTO) {
         Optional<UserEntity> byUserUserId = userRepository.findByUserId(userDTO.getUserId());
         System.out.println("DTO에서 값을 가져오니? = " + userDTO);
@@ -46,8 +47,13 @@ public class UserService {
         // 1. dto -> Entity 변환 (DTO는 데이터 전송을 위한 용도로 사용되고, Entity는 데이터베이스와의 상호작용을 위한 용도)
         // 2. repository의 createUser 메서드 호출
         UserEntity userEntity = UserEntity.toUserEntity(userDTO);
+        // DTO의 값을 Entity값으로 변경하는 모직
+        String encodedPassword = bCryptPasswordEncoder.encode(userDTO.getPassword());
+        userEntity.setPassword(encodedPassword);
+        // DTO에 입력된 패스워드를 인코딩하는 모직
         userRepository.save(userEntity);
-        System.out.println("userDTO = " + userDTO);
+        System.out.println("가입정보 = " + userDTO);
+        System.out.println("인코딩되나? = " + encodedPassword);
         if(userEntity != null){
             System.out.println("가입성공");
         }else{
