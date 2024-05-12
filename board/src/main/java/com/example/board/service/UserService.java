@@ -52,6 +52,11 @@ public class UserService {
         userEntity.setPassword(encodedPassword);
         // DTO에 입력된 패스워드를 인코딩하는 모직
         userRepository.save(userEntity);
+        boolean isUser = userRepository.existsByUserId(userEntity.getUserId());
+        if(isUser){
+            return;
+        }
+        System.out.println("isUser = " + isUser);
         System.out.println("가입정보 = " + userDTO);
         System.out.println("인코딩되나? = " + encodedPassword);
         if(userEntity != null){
@@ -78,9 +83,6 @@ public class UserService {
     public UserDTO findByNo(Long no) {
         Optional<UserEntity> optionalUserEntity = userRepository.findByNo(no);
         if(optionalUserEntity.isPresent()){
-//            UserEntity userEntity = optionalUserEntity.get();
-//            UserDTO.toUserDTO(userEntity);
-//            return userDTO;
             return UserDTO.toUserDTO(optionalUserEntity.get());
         }else{
             return null;
