@@ -6,7 +6,7 @@ import com.example.board.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+//    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     public UserDTO login(UserDTO userDTO) {
         Optional<UserEntity> byUserUserId = userRepository.findByUserId(userDTO.getUserId());
         System.out.println("DTO에서 값을 가져오니? = " + userDTO);
@@ -48,22 +48,20 @@ public class UserService {
         // 2. repository의 createUser 메서드 호출
         UserEntity userEntity = UserEntity.toUserEntity(userDTO);
         // DTO의 값을 Entity값으로 변경하는 모직
-        String encodedPassword = bCryptPasswordEncoder.encode(userDTO.getPassword());
-        userEntity.setPassword(encodedPassword);
+//        String encodedPassword = bCryptPasswordEncoder.encode(userDTO.getPassword());
+//        userEntity.setPassword(encodedPassword);
         // DTO에 입력된 패스워드를 인코딩하는 모직
-        userRepository.save(userEntity);
         boolean isUser = userRepository.existsByUserId(userEntity.getUserId());
-        if(isUser){
-            return;
-        }
-        System.out.println("isUser = " + isUser);
         System.out.println("가입정보 = " + userDTO);
-        System.out.println("인코딩되나? = " + encodedPassword);
-        if(userEntity != null){
-            System.out.println("가입성공");
+        System.out.println("isUser = " + isUser);
+//        System.out.println("인코딩되나? = " + encodedPassword);
+        if(isUser == false){
+            userRepository.save(userEntity);
+            System.out.println("가입 성공 = " + userEntity);
         }else{
-            System.out.println("가입실패");
+            System.out.println("가입 실패 = " + isUser);
         }
+
         // repository의 createUser 메서드 호출 ( 조건. entity객체를 넘겨줘야 함)
     }
 
