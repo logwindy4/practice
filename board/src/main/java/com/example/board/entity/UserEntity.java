@@ -18,7 +18,7 @@ public class UserEntity {
     @Column(name = "userId", unique = true)
     private String userId;
 
-    @Column
+    @Column(unique = true)
     private String password;
 
     @Column(name ="userEmail", unique = true)  // unique 제약조건 추가
@@ -49,6 +49,7 @@ public class UserEntity {
         userEntity.setPassword(userDTO.getPassword());
         userEntity.setEmail(userDTO.getEmail());
         userEntity.setUsername(userDTO.getUsername());
+        userEntity.setRole(userDTO.getRole());
         return userEntity;
     }
 }
