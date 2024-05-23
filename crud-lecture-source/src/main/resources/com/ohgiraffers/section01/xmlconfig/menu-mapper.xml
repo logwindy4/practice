@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="menu-mapper">
+<resultMap id="menuResultMap" type="com.ohgiraffers.section01.xmlconfig.MenuDTO">
+    <id property="code" column="MENU_CODE"/>
+    <result property="name" column="MENU_NAME"/>
+    <result property="price" column="MENU_PRICE"/>
+    <result property="categoryCode" column="CATEGORY_CODE"/>
+    <result property="orderableStatus"  column="ORDERBLE_STATUS"/>
+</resultMap>
+    <select id="selectAllMenu" resultMap="menuResultMap">
+        SELECT
+            menu_code,
+            menu_name,
+            menu_price,
+            categoryCode,
+            orderble_Status
+        FROM tbl_menu
+        WHERE orderble_Status = 'Y'
+        ORDER BY menu_code
+    </select>
+
+    <select id="selectMenuByCode" parameterType="_int" resultMap="menuResultMap">
+        SELECT
+        menu_code,
+        menu_name,
+        menu_price,
+        categoryCode,
+        orderble_Status
+        FROM tbl_menu
+        WHERE orderble_Status = 'Y'
+        AND menu_code = #{ code }
+    </select>
+
+    <insert id="insertMenu" parameterType="com.ohgiraffers.section01.xmlconfig.MenuDTO">
+        INSERT
+            INTO tbl_menu(
+                            menu_name,
+                            menu_price,
+                            category_code,
+                            orderable_status)
+        VALUE(
+        #{ name },
+        #{ price },
+        #{ categoryCode },
+        'Y'
+        )
+    </insert>
+    <update id="updateMenu">
+        UPDATE tbl_menu
+        SET menu_name = #{ name },
+            menu_price = #{ price },
+            category_code = #{ categoryCode }
+        WHERE menu_code = #{ code }
+    </update>
+
+    <delete id="deleteMenu">
+        DELETE
+            FROM tbl_menu
+        WHERE menu_code = #{ code }
+    </delete>
+</mapper>
