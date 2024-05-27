@@ -22,5 +22,6 @@
     </environments>
     <mappers>
         <package name="com.ohgiraffers.section01.xml"/>
+        <package name="com.ohgiraffers.section03.provider"/>
     </mappers>
 </configuration>
